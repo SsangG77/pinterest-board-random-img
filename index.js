@@ -13,8 +13,7 @@ if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR);
 async function scrapeAllBoardImages(username, boardName) {
   const boardUrl = `https://www.pinterest.com/${username}/${boardName}/`;
 const browser = await puppeteer.launch({
-  headless: true,
-  executablePath: '/usr/bin/chromium', // Render 환경에 따라 다름
+  headless: true
   args: ['--no-sandbox', '--disable-setuid-sandbox']
 });
 
