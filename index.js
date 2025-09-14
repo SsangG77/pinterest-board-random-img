@@ -12,11 +12,11 @@ if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR);
 // Puppeteer로 모든 이미지 스크랩
 async function scrapeAllBoardImages(username, boardName) {
   const boardUrl = `https://www.pinterest.com/${username}/${boardName}/`;
-  const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium',
-    args: ["--no-sandbox", "--disable-setuid-sandbox"]
-  });
+const browser = await puppeteer.launch({
+  args: ['--no-sandbox', '--disable-setuid-sandbox'],
+  headless: true,
+});
+
 
   const page = await browser.newPage();
 
