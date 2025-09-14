@@ -1,15 +1,10 @@
 {
-  "name": "pinterest",
+  "name": "pinterest-board-server",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-  "start": "node index.js",
-  "postinstall": "npx puppeteer install chromium"
-},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+    "start": "node index.js"
+  },
   "dependencies": {
     "express": "^5.1.0",
     "puppeteer": "^24.19.0"
