@@ -4,8 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
-    "postinstall": "apt-get update && apt-get install -y chromium"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
