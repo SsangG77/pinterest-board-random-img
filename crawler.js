@@ -77,4 +77,40 @@ async function scrapeBoard(username, board) {
   return Array.from(imageUrls);
 }
 
+// 직접 실행: cache.json의 모든 보드 크롤링
+// 새 보드 추가: node crawler.js add username boardName
+async function main() {
+  const args = process.argv.slice(2);
+
+  if (args[0] === "add" && args[1] && args[2]) {
+    const [, username, board] = args;
+    console.log(`Adding and crawling ${username}/${board}...`);
+    const urls = await scrapeBoard(username, board);
+    if (urls.length > 0) saveCache(username, board, urls);
+    return;
+  }
+
+  const cache = loadCacheFile();
+  if (cache.data.length === 0) {
+    console.log("No boards in cache.json. Add one first:");
+    console.log("  node crawler.js add <username> <boardName>");
+    return;
+  }
+
+  console.log(`Crawling ${cache.data.length} board(s)...\n`);
+  for (const { user, board } of cache.data) {
+    try {
+      const urls = await scrapeBoard(user, board);
+      if (urls.length > 0) saveCache(user, board, urls);
+    } catch (err) {
+      console.error(`[Error] ${user}/${board}: ${err.message}`);
+    }
+  }
+  console.log("\nAll done.");
+}
+
+if (require.main === module) {
+  main();
+}
+
 module.exports = { scrapeBoard, saveCache, loadCacheFile };

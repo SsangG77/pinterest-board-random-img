@@ -1,0 +1,43 @@
+name: Crawl Pinterest Boards
+
+on:
+  schedule:
+    - cron: "0 0 1 * *" # 매월 1일 자정 (UTC)
+  workflow_dispatch:
+    inputs:
+      username:
+        description: "Pinterest username (new board)"
+        required: false
+      board:
+        description: "Board name (new board)"
+        required: false
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+
+      # 새 보드 추가 (수동 트리거 시)
+      - name: Add new board
+        if: ${{ github.event.inputs.username && github.event.inputs.board }}
+        run: node crawler.js add ${{ github.event.inputs.username }} ${{ github.event.inputs.board }}
+
+      # 기존 보드 전체 크롤링
+      - name: Crawl all boards
+        run: node crawler.js
+
+      # cache.json 변경사항 커밋 & 푸시
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add cache.json
+          git diff --staged --quiet || git commit -m "Update cache.json"
+          git push
